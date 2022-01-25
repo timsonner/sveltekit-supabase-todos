@@ -16,27 +16,38 @@
         loading = false;
     });
 
-const updateTodo = async (todo) => {
-    console.table(todo)
-    // .update updates the 'task' column with the current todo.task
-    // .eq grabs the correct db entry by matching the current task.id to an entry with the same id in the 'id' column
-    try {
-        const { data, error } = await supabase
-        .from('todos')
-        .update({ task: todo.task })
-        .eq('id', todo.id)
-
-    } catch (error) {
-        alert(error.value)
+    const updateTask = async (todo) => {
+        console.table(todo);
+        // .update updates the 'task' column with the current todo.task
+        // .eq grabs the correct db entry by matching the current task.id to an entry with the same id in the 'id' column
+        try {
+            const { data, error } = await supabase
+                .from("todos")
+                .update({ task: todo.task })
+                .eq("id", todo.id);
+        } catch (error) {
+            alert(error.value);
+        }
     }
-}
 
+    const updateCompleted = async (todo) => {
+        console.log('updating completed from index.svelte')
+        try {
+            const { data, error } = await supabase
+                .from('todos')
+                .update({ completed: todo.completed })
+                .eq("id", todo.id)
+        } catch (error) {
+            alert(error.message)
+        }
+    }
 </script>
 
 {#if !loading}
     {#each todos as todo}
         <!-- pass props to the RowView component -->
-        <RowView {todo} {updateTodo}/>
+        <!-- props can be reactive variables, functions, or objects -->
+        <RowView {todo} {updateTask} {updateCompleted}/>
     {:else}
         <p>No todos found</p>
     {/each}
