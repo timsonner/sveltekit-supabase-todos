@@ -1,5 +1,5 @@
 <script>
-    export let todo, updateTask, updateCompleted
+    export let todo, updateTask, updateCompleted, removeTask
 </script>
 
 <div class="todo">
@@ -16,10 +16,9 @@
         type="text" 
         bind:value={todo.task}
         on:input={updateTask(todo)}>
-
-    <button>Edit</button>
-    <button>Delete</button>
+    <button on:click={removeTask(todo)}>Delete</button>
 </div>
+
 <style>
     .todo {
         display: flex;
