@@ -5,21 +5,17 @@
 <div class="todo">
     <input 
         type="checkbox" 
-        checked={todo.completed}
-        on:change={(event) => {
-                todo.completed = event.currentTarget.value
-                console.log('updateing task completion...')
-                updateCompleted(todo)}}/>
+        bind:checked={todo.completed}
+        on:change={
+                updateCompleted(todo)}/>
     
     <!-- on input, call updateTodo() -->
     <!-- event.currentTarget is this input -->
     <!-- updates the task property of todo -->
     <input 
         type="text" 
-        value={todo.task}
-        on:input={(event) => {
-            todo.task = event.currentTarget.value
-            updateTask(todo)}}>
+        bind:value={todo.task}
+        on:input={updateTask(todo)}>
 
     <button>Edit</button>
     <button>Delete</button>
