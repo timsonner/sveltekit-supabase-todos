@@ -18,6 +18,8 @@
             alert(error.message);
         }
         todos = data;
+        // Sort the todos array alphabetically
+        todos.sort((a, b) => a.task.localeCompare(b.task));
         loading = false;
     };
 
@@ -51,6 +53,7 @@
 
     const removeTask = async (todo) => {
         try {
+            // delete db entry from column "id" matching todo.id
             const { data, error } = await supabase
                 .from("todos")
                 .delete()
@@ -62,27 +65,44 @@
     };
 
     const insertTask = async () => {
-        if (newTask !== "") {
-            try {
-                const { data, error } = await supabase
-                    .from("todos")
-                    .insert([{ task: newTask }]);
-            } catch {
-                alert(error.message);
-            }
-            newTask = "";
-            await fetchTasks();
-        } else {
+        // check input contains something
+        if (newTask == "") {
             alert("New task cannot be empty");
+            return false;
+        }
+        // check if database already contains a task, reset newTask to avoid continous alert
+        if (supabase.from("todos").select("*").eq("task", newTask)) {
+            alert(`Task ${newTask} already exists`);
+            newTask = "";
+            return false;
+        }
+        try {
+            const { data, error } = await supabase
+                .from("todos")
+                .insert([{ task: newTask }]);
+        } catch {
+            alert(error.message);
+        }
+        newTask = "";
+        await fetchTasks();
+    };
+
+    const handleEnter = (event) => {
+        // Accept "Enter" as alternative to clicking Add button
+        if (event.key === "Enter") {
+            insertTask();
         }
     };
 </script>
+
+<svelte:window on:keypress={handleEnter} />
 
 <div class="addTask">
     <input
         type="text"
         bind:value={newTask}
         placeholder="Enter a new task here..."
+        on:key={handleEnter}
     />
     <button on:click={insertTask}>Add Task</button>
 </div>
@@ -102,6 +122,8 @@
         <p>No todos found</p>
     {/each}
 {:else}
+    Querying database...  
+    
     <div class="loader" />
 {/if}
 
