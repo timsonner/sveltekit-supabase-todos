@@ -2,8 +2,8 @@
     export let todo, updateTask, updateCompleted, removeTask
 </script>
 
-<div class="todo">
-    <input 
+<div class="task" class:completed={todo.completed}>
+    <input
         type="checkbox" 
         bind:checked={todo.completed}
         on:change={
@@ -20,8 +20,19 @@
 </div>
 
 <style>
-    .todo {
+    .task {
         display: flex;
         margin-bottom: 0.25em;
     }
+
+    .completed {
+        opacity: 0.5;
+    }
+
+    .completed [type="text"] {
+        text-decoration: line-through;
+        text-decoration-color: red;
+        text-decoration-thickness: 15%;
+    }
+    
 </style>

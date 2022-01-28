@@ -39,7 +39,8 @@
     };
 
     const updateCompleted = async (todo) => {
-        console.log("updating completed from index.svelte");
+        // update boolean value of completed
+        
         try {
             const { data, error } = await supabase
                 .from("todos")
@@ -54,6 +55,7 @@
     const removeTask = async (todo) => {
         try {
             // delete db entry from column "id" matching todo.id
+            // eg. delete row that matches this id
             const { data, error } = await supabase
                 .from("todos")
                 .delete()
@@ -73,7 +75,7 @@
         // check if database already contains a task, reset newTask to avoid continous alert
 
         if (todos.some((e) => e.task === newTask)) {
-            alert(`${newTask} already exists`);
+            alert(`Task "${newTask}" already exists`);
             newTask = ''
             return false;
         }
