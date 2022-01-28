@@ -71,11 +71,13 @@
             return false;
         }
         // check if database already contains a task, reset newTask to avoid continous alert
-        if (supabase.from("todos").select("*").eq("task", newTask)) {
-            alert(`Task ${newTask} already exists`);
-            newTask = "";
+
+        if (todos.some((e) => e.task === newTask)) {
+            alert(`${newTask} already exists`);
+            newTask = ''
             return false;
         }
+
         try {
             const { data, error } = await supabase
                 .from("todos")
@@ -122,8 +124,8 @@
         <p>No todos found</p>
     {/each}
 {:else}
-    Querying database...  
-    
+    Querying database...
+
     <div class="loader" />
 {/if}
 
